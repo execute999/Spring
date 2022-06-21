@@ -35,5 +35,6 @@ public class ServiceContacts implements InterfaceContacts {
 	public void Delete(Integer id) {
 		ContactsService.deleteById(id);
 	}
+
 	
 }

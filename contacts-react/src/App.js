@@ -12,8 +12,6 @@ import { Button } from 'primereact/button';
 import './App.css';
 import { PersonService } from './service/Contact'
 import { PrimeIcons } from 'primereact/api';
-import { Menu } from 'primereact/menu';
-import { FaBeer } from 'react-icons/fa';
 
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
@@ -22,16 +20,16 @@ import 'primeicons/primeicons.css';
 export default class App extends Component{
   constructor() {
     super();
-    this.state = {
+    this.state = { // calling state to my main variables
       visible : false,
-      person: {
+      person: { // this person is dinamic when i am filling the form
         idContact : null,
         name : null,
         lastName : null,
         emailAddress : null,
         phone : null,
       },
-      selectedContact : {
+      selectedContact : { // is important when i want to update !!!!!!
         idContact : null,
         name : null,
         lastName : null,
@@ -41,10 +39,13 @@ export default class App extends Component{
       
     }
    
-    this.PersonService = new PersonService();
+    this.PersonService = new PersonService(); // Calling to /Service/Contact.js/Class
+
+    // define methods
     this.save = this.save.bind(this);
     this.delete = this.delete.bind(this);
-    this.items = [
+
+    this.items = [ // options 
       {
         label : 'NEW CONTACT',
         icon: PrimeIcons.PLUS ,
@@ -61,17 +62,21 @@ export default class App extends Component{
         command : () => { this.ShowEditDialog() }
       },
     ]
-    this.footer = (
+
+    this.footer = ( // a simple button, called when is necesary
       <div>
         <Button label ="SAVE" onClick = {this.save} />
       </div>
     )
+
   }
 
-  componentDidMount() {
+  componentDidMount() { 
+    // allows me to execute the react when the component 
+    //is already placed in the Document Object Model DOM
     this.PersonService.getAll().then(data => this.setState({contacts : data}));
     this.PersonService.getAll().then(data => {
-      console.log(data);
+      console.log(data); // showing in conosle
     });
     this.setState({
       
@@ -80,7 +85,7 @@ export default class App extends Component{
 
   save() {
     this.PersonService.save(this.state.person).then( data => {
-      console.log("----------------");
+      console.log("-------SAVING---------");
       console.log(data);
       console.log("----------------");
       this.setState({
@@ -104,11 +109,10 @@ export default class App extends Component{
    return (
      <div>
         
-        <Panel header = "CONTACTS" style = {{ width : '90%' , margin : '30px auto 0px'}}>
+        <Panel header = "USERS" style = {{ width : '90%' , margin : '30px auto 0px'}}>
             <Menubar model = {this.items} />
             <br></br>
             <DataTable value={this.state.contacts} selectionMode = "single" selection = {this.state.selectedContact} onSelectionChange = {e => this.setState({ selectedContact: e.value } )} > 
-
                 <Column field = "idContact" header= "ID"></Column>
                 <Column field = "name" header= "Name"></Column>
                 <Column field = "lastName" header= "LastName"></Column>
@@ -138,7 +142,7 @@ export default class App extends Component{
             })}  />
             <label htmlFor='Last Name'>Last Name</label>
           </span>
-
+          
           <br></br>
           <span className='p-float-label'>
             <InputText value = {this.state.person.emailAddress } id="emailAddres" onChange={(e) => this.setState(prevState => {
